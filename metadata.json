@@ -1,0 +1,6 @@
+{
+  "name": "Strategic Frameworks Compass",
+  "description": "An interactive directory and Akinator-style decision engine for 200+ marketing, strategy, operations, and psychometric frameworks.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
