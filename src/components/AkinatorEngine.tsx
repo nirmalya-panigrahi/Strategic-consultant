@@ -8,9 +8,10 @@ import { HelpCircle, RefreshCw, Undo2, Award, ArrowRight, Lightbulb, Play, Searc
 
 interface AkinatorEngineProps {
   onSelectFramework: (framework: Framework) => void;
+  onProgressChange?: (percent: number) => void;
 }
 
-export const AkinatorEngine: React.FC<AkinatorEngineProps> = ({ onSelectFramework }) => {
+export const AkinatorEngine: React.FC<AkinatorEngineProps> = ({ onSelectFramework, onProgressChange }) => {
   const [candidates, setCandidates] = useState<Framework[]>([...frameworks]);
   const [askedKeys, setAskedKeys] = useState<Set<string>>(new Set<string>());
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
@@ -60,6 +61,19 @@ export const AkinatorEngine: React.FC<AkinatorEngineProps> = ({ onSelectFramewor
       setCurrentQuestion(nextQ);
     }
   }, [candidates, askedKeys, gameState]);
+
+  // Sync completion percentage to parent status bar
+  useEffect(() => {
+    if (!onProgressChange) return;
+    if (gameState === 'welcome' || gameState === 'noMatch') {
+      onProgressChange(0);
+    } else if (gameState === 'guessed') {
+      onProgressChange(100);
+    } else {
+      const pct = Math.round(((frameworks.length - candidates.length) / frameworks.length) * 100);
+      onProgressChange(pct);
+    }
+  }, [candidates.length, gameState, onProgressChange]);
 
   // Handle answers
   const handleAnswer = (answer: 'yes' | 'no' | 'dontKnow') => {

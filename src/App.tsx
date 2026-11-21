@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Framework } from './types';
 import { AkinatorEngine } from './components/AkinatorEngine';
 import { FrameworkExplorer } from './components/FrameworkExplorer';
-import { Compass, HelpCircle, Search, Layers, Dna, Info } from 'lucide-react';
+import { Compass, HelpCircle, Search, Layers, Dna, Info, ArrowLeft, ExternalLink } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'game' | 'explorer'>('game');
   const [selectedFramework, setSelectedFramework] = useState<Framework | null>(null);
+  const [completionPercent, setCompletionPercent] = useState<number>(0);
 
   // When clicking "Examine in Explorer" from guessed state:
   const handleSelectFrameworkFromGame = (framework: Framework) => {
@@ -29,38 +30,41 @@ export default function App() {
               <h1 className="text-lg font-bold text-slate-950 tracking-tight flex items-center gap-1.5 font-sans">
                 Frameworks Compass
               </h1>
-              <p className="text-[11px] font-medium text-slate-400">
-                Akinator Diagnostic Engine & Directory for 200+ Strategic Models
-              </p>
             </div>
           </div>
 
-          {/* Tab toggles */}
-          <div className="flex bg-slate-100 p-1.5 rounded-xl text-xs font-semibold self-start sm:self-auto shadow-inner">
-            <button
-              onClick={() => setActiveTab('game')}
-              id="tab-game-toggle"
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-lg transition ${
-                activeTab === 'game'
-                  ? 'bg-white text-slate-900 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-800'
+          {/* Status bar & Canvas link */}
+          <div className="flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-xl text-xs font-semibold self-start sm:self-auto shadow-inner">
+            <div
+              onClick={activeTab === 'explorer' ? () => setActiveTab('game') : undefined}
+              role={activeTab === 'explorer' ? 'button' : 'progressbar'}
+              aria-valuenow={completionPercent}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              className={`flex items-center gap-3 bg-white px-3.5 py-2 rounded-lg shadow-sm ${
+                activeTab === 'explorer' ? 'cursor-pointer hover:bg-slate-50 transition' : ''
               }`}
             >
-              <HelpCircle className="w-3.5 h-3.5" />
-              Strategic Akinator
-            </button>
-            <button
-              onClick={() => setActiveTab('explorer')}
-              id="tab-explorer-toggle"
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-lg transition ${
-                activeTab === 'explorer'
-                  ? 'bg-white text-slate-900 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-800'
-              }`}
+              <div className="w-24 sm:w-28 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div
+                  className="bg-indigo-600 h-full rounded-full transition-all duration-300"
+                  style={{ width: `${completionPercent}%` }}
+                />
+              </div>
+              <span className="text-[11px] font-mono font-bold text-slate-700 tabular-nums whitespace-nowrap">
+                {completionPercent}% complete
+              </span>
+            </div>
+            <a
+              href="https://business-frameworks.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg transition text-indigo-600 hover:text-indigo-700 hover:bg-white/80"
             >
-              <Layers className="w-3.5 h-3.5" />
-              Browse 200+ Directory
-            </button>
+              <ArrowLeft className="w-3.5 h-3.5" />
+              Go back to Canvas
+              <ExternalLink className="w-3 h-3 opacity-70" />
+            </a>
           </div>
 
         </div>
@@ -72,10 +76,6 @@ export default function App() {
         {/* APP CONTEXT EXPLAINER HERO BANNER */}
         <div className="mb-8 bg-gradient-to-r from-indigo-50/50 via-white to-slate-50 border border-slate-100 rounded-3xl p-5 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-1.5 bg-indigo-50 border border-indigo-100 text-indigo-700 px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider mb-2">
-              <Dna className="w-3 h-3" />
-              Entropy-Based Search Model
-            </div>
             <h2 className="text-xl font-extrabold text-slate-950 tracking-tight font-sans">
               Find Your strategic Fit
             </h2>
@@ -102,7 +102,10 @@ export default function App() {
         <div className="transition-all duration-300">
           {activeTab === 'game' ? (
             <div className="py-4">
-              <AkinatorEngine onSelectFramework={handleSelectFrameworkFromGame} />
+              <AkinatorEngine
+                onSelectFramework={handleSelectFrameworkFromGame}
+                onProgressChange={setCompletionPercent}
+              />
             </div>
           ) : (
             <div className="py-4">
@@ -118,12 +121,19 @@ export default function App() {
 
       {/* FOOTER METRICS INFO */}
       <footer className="border-t border-slate-100 bg-white mt-16 py-6 text-center text-xs text-slate-400 font-medium">
-        <p className="flex items-center justify-center gap-1.5 font-mono text-[10px] tracking-wider uppercase">
-          <span>Frameworks Compass platform</span>
+        <p className="flex flex-wrap items-center justify-center gap-1.5 font-mono text-[10px] tracking-wider uppercase px-4">
+          <span>For informational purposes only, not professional advice.</span>
           <span className="text-slate-300">•</span>
-          <span>Entropy Engine v1.2</span>
-          <span className="text-slate-300">•</span>
-          <span>215 verified items</span>
+          <a
+            href="https://business-frameworks.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-700 hover:underline transition"
+          >
+            <ArrowLeft className="w-3 h-3" />
+            Go back to Canvas
+            <ExternalLink className="w-2.5 h-2.5 opacity-70" />
+          </a>
         </p>
       </footer>
 
