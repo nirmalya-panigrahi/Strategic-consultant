@@ -4,7 +4,7 @@ import { Framework, Question, QuestionHistory } from '../types';
 import { frameworks } from '../data/frameworks';
 import { findBestQuestion, matchesQuestion } from '../utils/entropy';
 import { VisualPreview } from './VisualPreview';
-import { HelpCircle, RefreshCw, Undo2, Award, ArrowRight, Lightbulb, Play, Search, AlertCircle } from 'lucide-react';
+import { HelpCircle, RefreshCw, Undo2, ArrowRight, Lightbulb, Play, Search, AlertCircle } from 'lucide-react';
 
 interface AkinatorEngineProps {
   onSelectFramework: (framework: Framework) => void;
@@ -169,8 +169,12 @@ export const AkinatorEngine: React.FC<AkinatorEngineProps> = ({ onSelectFramewor
             transition={{ duration: 0.25 }}
             className="text-center py-10"
           >
-            <div className="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-md border border-indigo-100">
-              <Lightbulb className="w-10 h-10 animate-pulse" />
+            <div className="w-full max-w-xs sm:max-w-sm mx-auto mb-5">
+              <img
+                src={`${(import.meta as ImportMeta & { env?: { BASE_URL?: string } }).env?.BASE_URL ?? '/'}assets/aistudio/image_e9b0c042.png`}
+                alt="Strategic Frameworks Consultant"
+                className="w-full h-auto mx-auto block object-contain"
+              />
             </div>
 
             <h2 className="text-3xl font-bold tracking-tight text-slate-950 mb-3 font-sans">
@@ -319,10 +323,6 @@ export const AkinatorEngine: React.FC<AkinatorEngineProps> = ({ onSelectFramewor
             transition={{ duration: 0.3 }}
             className="text-center"
           >
-            <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-emerald-100 shadow-sm">
-              <Award className="w-8 h-8 animate-bounce" />
-            </div>
-
             <p className="text-[11px] font-mono text-emerald-600 uppercase tracking-wider font-bold mb-1">
               Match Identified!
             </p>
